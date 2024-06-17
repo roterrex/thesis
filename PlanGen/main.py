@@ -1,4 +1,5 @@
-from PlanGen.util import util
+#from PlanGen.util import util
+from util import util
 import tensorflow as tf
 import os
 import pathlib
@@ -26,6 +27,7 @@ path_to_zip = tf.keras.utils.get_file(
 path_to_zip  = pathlib.Path(path_to_zip)
 
 PATH = path_to_zip.parent/dataset_name
+print(PATH)
 
 print(list(PATH.parent.iterdir()))
 

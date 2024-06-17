@@ -3,19 +3,19 @@ import tensorflow as tf
 class util:
     @staticmethod
     def resize(input_image, real_image, size):
-        input_image = tf.image.resize(input_image, [size(0), size(1)],
+        input_image = tf.image.resize(input_image, [size[0], size[1]],
                                         method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
-        real_image = tf.image.resize(real_image, [size(0), size(1)],
+        real_image = tf.image.resize(real_image, [size[0], size[1]],
                                     method=tf.image.ResizeMethod.NEAREST_NEIGHBOR)
 
         return input_image, real_image
 
     @staticmethod
-    def random_crop(input_image, real_image, conf):
-        size = conf['LayoutGan']['ImgSize']
+    def random_crop(input_image, real_image, size):
+        #size = conf['LayoutGan']['ImgSize']
         stacked_image = tf.stack([input_image, real_image], axis=0)
         cropped_image = tf.image.random_crop(
-            stacked_image, size=[2, size(0), size(1), size(2)])
+            stacked_image, size=[2, size[0], size[1], size[2]])
 
         return cropped_image[0], cropped_image[1]
 
@@ -32,7 +32,7 @@ class util:
     def random_jitter(input_image, real_image, conf):
         size = conf['LayoutGan']['ImgSize']
         # Resizing to 286x286
-        input_image, real_image = util.resize(input_image, real_image, [int(size(0)*1.2), int(size(1)*1.2)])
+        input_image, real_image = util.resize(input_image, real_image, [int(size[0]*1.2), int(size[1]*1.2)])
 
         # Random cropping back to 256x256
         input_image, real_image = util.random_crop(input_image, real_image, size)
