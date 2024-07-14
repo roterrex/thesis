@@ -54,7 +54,7 @@ class testTrain:
             disc_real_output = self.pix_model.discriminator([input_image, target], training=True)
             disc_generated_output = self.pix_model.discriminator([input_image, gen_output], training=True)
 
-            gen_total_loss, gen_gan_loss, gen_l1_loss = self.pix_model.generator_loss(disc_generated_output, gen_output, target)
+            gen_total_loss = self.pix_model.generator_loss(disc_generated_output, gen_output, target) #, gen_gan_loss, gen_l1_loss
             disc_loss = self.pix_model.discriminator_loss(disc_real_output, disc_generated_output)
 
         generator_gradients = gen_tape.gradient(gen_total_loss,
@@ -69,8 +69,8 @@ class testTrain:
 
         with self.summary_writer.as_default():
             tf.summary.scalar('gen_total_loss', gen_total_loss, step=step//1000)
-            tf.summary.scalar('gen_gan_loss', gen_gan_loss, step=step//1000)
-            tf.summary.scalar('gen_l1_loss', gen_l1_loss, step=step//1000)
+            #tf.summary.scalar('gen_gan_loss', gen_gan_loss, step=step//1000)
+            #tf.summary.scalar('gen_l1_loss', gen_l1_loss, step=step//1000)
             tf.summary.scalar('disc_loss', disc_loss, step=step//1000)
 
     def fit(self, train_ds, test_ds, steps):
@@ -93,7 +93,9 @@ class testTrain:
             self.train_step(input_image, target, step)
 
             # Training step
-            if (step+1) % 50 == 0:
+            if (step+1) % 250 == 0:
+                print('|', end='', flush=True)
+            elif (step+1) % 50 == 0:
                 print('.', end='', flush=True)
 
 

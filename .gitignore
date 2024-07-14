@@ -5,3 +5,8 @@ PlanGen/__pycache__
 2018451309_5_1_230330_031632-w1600-h1067.jfif
 HighresScreenshot00000.png
 978-3-030-64559-5.pdf
+training_checkpoints/checkpoint
+training_checkpoints/ckpt-1.data-00000-of-00001
+training_checkpoints/ckpt-1.index
+training_checkpoints/ckpt-2.data-00000-of-00001
+training_checkpoints/ckpt-2.index

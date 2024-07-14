@@ -10,9 +10,10 @@ from matplotlib import pyplot as plt
 from testTrain import testTrain
 from pixToPix import pix2Pix
 #from IPython import display
+import time
 
 conf = yaml.load(open("PlanGen/settings.yaml", 'r'), Loader=yaml.Loader)
-
+"""
 dataset_name = "facades"
 
 _URL = f'http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/{dataset_name}.tar.gz'
@@ -21,10 +22,10 @@ path_to_zip = tf.keras.utils.get_file(
     fname=f"{dataset_name}.tar.gz",
     origin=_URL,
     extract=True)
-
 path_to_zip  = pathlib.Path(path_to_zip)
 
-PATH = path_to_zip.parent/dataset_name
+PATH = path_to_zip.parent/dataset_name"""
+PATH = pathlib.Path('D:\\uni\\Thesis\\New folder\\dataset2')
 
 print(list(PATH.parent.iterdir()))
 
@@ -136,6 +137,7 @@ p2p = pix2Pix(conf)
 
 tt = testTrain(p2p, None, conf)
 
-tt.fit(train_dataset, test_dataset, steps=5000)
+tt.fit(train_dataset, test_dataset, steps=1000000000000)
 
-
+while True:
+  time.sleep(500000)

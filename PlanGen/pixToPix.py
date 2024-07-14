@@ -93,14 +93,14 @@ class pix2Pix:
         self.discriminator = tf.keras.Model(inputs=[inp, tar], outputs=last)
 
     def generator_loss(self, disc_generated_output, gen_output, target):
-        gan_loss = self.loss_object(tf.ones_like(disc_generated_output), disc_generated_output)
+        #gan_loss = self.loss_object(tf.ones_like(disc_generated_output), disc_generated_output)
 
         # Mean absolute error
-        l1_loss = tf.reduce_mean(tf.abs(target - gen_output))
+        #l1_loss = tf.reduce_mean(tf.abs(target - gen_output))
 
-        total_gen_loss = gan_loss + (self.LAMBDA * l1_loss)
+        total_gen_loss = self.loss_object(tf.ones_like(disc_generated_output), disc_generated_output)#gan_loss + (self.LAMBDA * l1_loss)
 
-        return total_gen_loss, gan_loss, l1_loss
+        return total_gen_loss#, gan_loss, l1_loss
 
     def discriminator_loss(self, disc_real_output, disc_generated_output):
         real_loss = self.loss_object(tf.ones_like(disc_real_output), disc_real_output)
