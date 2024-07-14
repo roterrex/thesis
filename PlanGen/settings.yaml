@@ -6,8 +6,10 @@ images:
 
 LayoutGan:
   TrainTestSplit: 0.75
-  ImgSize: [64,64,3]
   ImageSuffleSeed: -1 # -1 to enable random shuffle
+  ImgSize: [64,64,3]
+  BatchSize: 1
+  BufferSize: 400
   
 
 name: Martin D'vloper #key-value
