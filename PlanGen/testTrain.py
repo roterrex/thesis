@@ -10,11 +10,11 @@ from IPython import display
 
 class testTrain:
     log_dir="logs/"
-    checkpoint_dir = './training_checkpoints'
-    checkpoint_prefix = os.path.join(checkpoint_dir, "ckpt")
 
     def __init__(self, pix_model, dataloader, conf) -> None:
         self.conf = conf
+        self.checkpoint_dir = self.conf['Checkpoint']['save_dir']
+        self.checkpoint_prefix = os.path.join(self.checkpoint_dir, "ckpt")
         self.pix_model = pix_model
         self.dataloader = dataloader
         self.summary_writer = tf.summary.create_file_writer(
@@ -23,6 +23,16 @@ class testTrain:
                                  discriminator_optimizer=self.pix_model.discriminator_optimizer,
                                  generator=self.pix_model.generator,
                                  discriminator=self.pix_model.discriminator)
+        
+        if self.conf['Checkpoint']['load_from_checkpoint']:
+            if self.conf['Checkpoint']['checkpoint_to_load'] == '':
+                check_point_path = tf.train.latest_checkpoint(self.conf['Checkpoint']['load_dir'])
+            else:
+                check_point_path = self.conf['Checkpoint']['load_dir']+'\\'+self.conf['Checkpoint']['checkpoint_to_load']
+            print("load from checkpoint : ", check_point_path)
+            self.checkpoint.restore(check_point_path)
+
+        self.plot_checkpoint_images = conf['Checkpoint']['plot_checkpoints']
 
 
 
@@ -48,6 +58,7 @@ class testTrain:
 
     @tf.function
     def train_step(self, input_image, target, step):
+
         with tf.GradientTape() as gen_tape, tf.GradientTape() as disc_tape:
             gen_output = self.pix_model.generator(input_image, training=True)
 
@@ -87,7 +98,7 @@ class testTrain:
                 print(f"Step: {step//1000}k")
 
 
-            self.generate_images(example_input, example_target, (step) % 1000 == 0)
+            self.generate_images(example_input, example_target, self.plot_checkpoint_images and (step) % 1000 == 0)
 
 
             self.train_step(input_image, target, step)

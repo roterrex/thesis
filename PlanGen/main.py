@@ -27,16 +27,17 @@ path_to_zip = tf.keras.utils.get_file(
 path_to_zip  = pathlib.Path(path_to_zip)
 
 PATH = path_to_zip.parent/dataset_name"""
-PATH = pathlib.Path('D:\\uni\\Thesis\\New folder\\dataset2')
+PATH = pathlib.Path(conf['images']['Dataset'])
 
 print(list(PATH.parent.iterdir()))
 
-sample_image = tf.io.read_file(str(PATH / 'train/1.jpg'))
-sample_image = tf.io.decode_jpeg(sample_image)
-print(sample_image.shape)
-plt.figure()
-plt.imshow(sample_image)
-plt.show()
+if conf['images']['plotSample']:
+  sample_image = tf.io.read_file(str(PATH / 'train/1.jpg'))
+  sample_image = tf.io.decode_jpeg(sample_image)
+  print(sample_image.shape)
+  plt.figure()
+  plt.imshow(sample_image)
+  plt.show()
 
 def load(image_file):
   # Read and decode an image file to a uint8 tensor

@@ -1,5 +1,7 @@
 from matplotlib import pyplot as plt
 import tensorflow as tf
+from keras import metrics
+import numpy as np
 
 class pix2Pix:
     def __init__(self, conf):
@@ -8,7 +10,7 @@ class pix2Pix:
 
         self.output_channels = 3
 
-        self.loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=True)
+        self.loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=False)
         self.LAMBDA = 100
 
         self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
@@ -16,6 +18,12 @@ class pix2Pix:
 
         self.Generator()
         self.Discriminator()
+
+        self.loss_method_Cross = self.conf['Loss']['Loss_function'] == 'cross'
+        self.loss_method_Wasser = self.conf['Loss']['Loss_function'] == 'wesser'
+        if not (self.loss_method_Cross or self.loss_method_Wasser):
+            print("p2p : no loss method selected")
+
         pass
 
     
@@ -88,26 +96,32 @@ class pix2Pix:
         zero_pad2 = tf.keras.layers.ZeroPadding2D()(leaky_relu)                     # (batch_size, 33, 33, 512)
 
         last = tf.keras.layers.Conv2D(1, 4, strides=1,
-                                      kernel_initializer=initializer)(zero_pad2)    # (batch_size, 30, 30, 1)
+                                      kernel_initializer=initializer, activation='linear')(zero_pad2)    # (batch_size, 30, 30, 1)
 
         self.discriminator = tf.keras.Model(inputs=[inp, tar], outputs=last)
 
-    def generator_loss(self, disc_generated_output, gen_output, target):
+    def generator_loss(self, disc_generated_output, gen_output, targets):
         #gan_loss = self.loss_object(tf.ones_like(disc_generated_output), disc_generated_output)
 
         # Mean absolute error
         #l1_loss = tf.reduce_mean(tf.abs(target - gen_output))
 
-        total_gen_loss = self.loss_object(tf.ones_like(disc_generated_output), disc_generated_output)#gan_loss + (self.LAMBDA * l1_loss)
+        if self.loss_method_Cross:
+            total_gen_loss = self.loss_object(tf.ones_like(disc_generated_output), disc_generated_output)#gan_loss + (self.LAMBDA * l1_loss)
+        elif self.loss_method_Wesser:
+            total_gen_loss = -tf.reduce_mean(disc_generated_output)
 
         return total_gen_loss#, gan_loss, l1_loss
 
     def discriminator_loss(self, disc_real_output, disc_generated_output):
-        real_loss = self.loss_object(tf.ones_like(disc_real_output), disc_real_output)
+        if self.loss_method_Cross:
+            real_loss = self.loss_object(tf.ones_like(disc_real_output), disc_real_output)
+            generated_loss = self.loss_object(tf.zeros_like(disc_generated_output), disc_generated_output)
+        elif self.loss_method_Wesser:
+            real_loss = tf.reduce_mean(disc_real_output)
+            generated_loss = tf.reduce_mean(disc_generated_output)
 
-        generated_loss = self.loss_object(tf.zeros_like(disc_generated_output), disc_generated_output)
-
-        total_disc_loss = real_loss + generated_loss
+        total_disc_loss = generated_loss - real_loss
 
         return total_disc_loss
     
@@ -144,4 +158,14 @@ class pix2Pix:
         result.add(tf.keras.layers.ReLU())
 
         return result
+    
+
+
+    # implementation of wasserstein loss
+    def wasserstein_loss(self, y_true, y_pred):
+        print(y_pred)
+        print(y_true * y_pred)
+        m = tf.keras.metrics.Mean()
+        m.update_state(y_true * y_pred)
+        return m.result()
 

@@ -2,30 +2,27 @@
 #Describes some characteristics and preferences
 ---
 images:
-  LayoutFolderPath: "../New folder"
+  Dataset: 'D:\\uni\\Thesis\\New folder\\dataset2'
+  plotSample: False
 
 LayoutGan:
   TrainTestSplit: 0.75
   ImageSuffleSeed: -1 # -1 to enable random shuffle
   ImgSize: [64,64,3]
-  BatchSize: 1
+  BatchSize: 64
   BufferSize: 400
-  
 
-name: Martin D'vloper #key-value
-age: 26
-hobbies: 
-  - painting #first list item
-  - playing_music #second list item
-  - cooking #third list item
-programming_languages:
-  java: Intermediate
-  python: Advanced
-  javascript: Beginner
-favorite_food: 
-  - vegetables: tomatoes 
-  - fruits: 
-      citrics: oranges 
-      tropical: bananas
-      nuts: peanuts
-      sweets: raisins
+Loss:
+  Loss_function: 'cross' #'cross', wesser
+
+Checkpoint:
+  plot_checkpoints: False
+  save_dir: './training_checkpoints_ds2_C'
+  load_dir: './training_checkpoints'
+  load_from_checkpoint: False
+  checkpoint_to_load: '' #leave empty for latest
+
+Waz:
+  a: 0.00005 #learning rate - not imp
+  c: 0.01 #clipping param - not imp
+  ncrit: 5 #critic updates per generator update - not imp
