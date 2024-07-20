@@ -20,8 +20,8 @@ class pix2Pix:
         self.Discriminator()
 
         self.loss_method_Cross = self.conf['Loss']['Loss_function'] == 'cross'
-        self.loss_method_Wasser = self.conf['Loss']['Loss_function'] == 'wesser'
-        if not (self.loss_method_Cross or self.loss_method_Wasser):
+        self.loss_method_Wesser = self.conf['Loss']['Loss_function'] == 'wesser'
+        if not (self.loss_method_Cross or self.loss_method_Wesser):
             print("p2p : no loss method selected")
 
         pass
