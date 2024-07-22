@@ -13,24 +13,14 @@ class testTrain:
 
     def __init__(self, pix_model, dataloader, conf) -> None:
         self.conf = conf
-        self.checkpoint_dir = self.conf['Checkpoint']['save_dir']
-        self.checkpoint_prefix = os.path.join(self.checkpoint_dir, "ckpt")
+
         self.pix_model = pix_model
         self.dataloader = dataloader
         self.summary_writer = tf.summary.create_file_writer(
             self.log_dir + "fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
-        self.checkpoint = tf.train.Checkpoint(generator_optimizer=self.pix_model.generator_optimizer,
-                                 discriminator_optimizer=self.pix_model.discriminator_optimizer,
-                                 generator=self.pix_model.generator,
-                                 discriminator=self.pix_model.discriminator)
         
-        if self.conf['Checkpoint']['load_from_checkpoint']:
-            if self.conf['Checkpoint']['checkpoint_to_load'] == '':
-                check_point_path = tf.train.latest_checkpoint(self.conf['Checkpoint']['load_dir'])
-            else:
-                check_point_path = self.conf['Checkpoint']['load_dir']+'\\'+self.conf['Checkpoint']['checkpoint_to_load']
-            print("load from checkpoint : ", check_point_path)
-            self.checkpoint.restore(check_point_path)
+        
+        
 
         self.plot_checkpoint_images = conf['Checkpoint']['plot_checkpoints']
 
@@ -40,12 +30,12 @@ class testTrain:
 
 
     def generate_images(self, test_input, tar, plot=False):
-        prediction = self.pix_model.generator(test_input, training=True)
-
-        display_list = [test_input[0], tar[0], prediction[0]]
-        title = ['Input Image', 'Ground Truth', 'Predicted Image']
-
         if plot:
+            prediction = self.pix_model.generator(test_input, training=True)
+
+            display_list = [test_input[0], tar[0], prediction[0]]
+            title = ['Input Image', 'Ground Truth', 'Predicted Image']
+
             plt.figure(figsize=(15, 15))
             for i in range(3):
                 plt.subplot(1, 3, i+1)
@@ -111,7 +101,7 @@ class testTrain:
 
 
             # Save (checkpoint) the model every 5k steps
-            if (step + 1) % 5000 == 0:
-                self.checkpoint.save(file_prefix=self.checkpoint_prefix)
+            
+            
             if step == steps-1:
                 break

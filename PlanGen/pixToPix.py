@@ -2,29 +2,39 @@ from matplotlib import pyplot as plt
 import tensorflow as tf
 from keras import metrics
 import numpy as np
+import os
 
 class pix2Pix:
     def __init__(self, conf):
         self.conf = conf
+
         self.shape = self.conf['LayoutGan']['ImgSize']
-
         self.output_channels = 3
-
-        self.loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=False)
         self.LAMBDA = 100
 
+        
         self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
         self.discriminator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
 
         self.Generator()
         self.Discriminator()
 
+        self.loss_object = tf.keras.losses.BinaryCrossentropy(from_logits=False)
         self.loss_method_Cross = self.conf['Loss']['Loss_function'] == 'cross'
         self.loss_method_Wesser = self.conf['Loss']['Loss_function'] == 'wesser'
         if not (self.loss_method_Cross or self.loss_method_Wesser):
             print("p2p : no loss method selected")
 
-        pass
+        self.checkpoint_dir = self.conf['Checkpoint']['save_dir']
+        self.checkpoint_prefix = os.path.join(self.checkpoint_dir, "ckpt")
+        self.checkpoint = tf.train.Checkpoint(
+                generator_optimizer=self.generator_optimizer,
+                discriminator_optimizer=self.discriminator_optimizer,
+                generator=self.generator,
+                discriminator=self.discriminator
+            )
+        
+
 
     
     def Generator(self):
@@ -159,8 +169,22 @@ class pix2Pix:
 
         return result
     
+    def load_checkpoint(self, run_load): #self.conf['Checkpoint']['load_from_checkpoint']
+        if run_load:
+            if self.conf['Checkpoint']['checkpoint_to_load'] == '':
+                check_point_path = tf.train.latest_checkpoint(self.conf['Checkpoint']['load_dir'])
+            else:
+                check_point_path = self.conf['Checkpoint']['load_dir']+'\\'+self.conf['Checkpoint']['checkpoint_to_load']
+            print("load from checkpoint : ", check_point_path)
+            self.checkpoint.restore(check_point_path)
+
+    def save_checkpoint(self, run_save): #(step + 1) % 5000 == 0
+        self.checkpoint.save(file_prefix=self.checkpoint_prefix)
+        print("Checkpoint Saved")
 
 
+
+    """
     # implementation of wasserstein loss
     def wasserstein_loss(self, y_true, y_pred):
         print(y_pred)
@@ -168,4 +192,4 @@ class pix2Pix:
         m = tf.keras.metrics.Mean()
         m.update_state(y_true * y_pred)
         return m.result()
-
+    """
