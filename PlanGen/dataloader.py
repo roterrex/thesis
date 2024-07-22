@@ -31,7 +31,7 @@ class dataloader:
 
         val_ds = tf.data.Dataset.list_files(str(self.ds_path / 'val/*.jpg'))
         val_ds = val_ds.map(self.load_image_test)
-        val_ds = val_ds.batch(self.conf['LayoutGan']['BatchSize'])
+        val_ds = val_ds.batch(1)#self.conf['LayoutGan']['BatchSize'])
 
         return train_ds, test_ds, val_ds      
 

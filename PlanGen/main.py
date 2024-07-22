@@ -32,7 +32,7 @@ if conf['images']['Epochs'] > 0:
   tt.fit(train_ds, test_ds, steps=conf['images']['Epochs'])
 
 pstpro = postProcessor(conf, p2p)
-pstpro.process(test_ds)
+pstpro.process(val_ds)
 
 while True:
   time.sleep(500000)

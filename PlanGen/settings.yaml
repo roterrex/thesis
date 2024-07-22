@@ -21,9 +21,9 @@ Checkpoint:
   plot_checkpoints: True
   save_every: 5000
   save_dir: './training_checkpoints_ds2_C'
-  load_dir: './New folder'
+  load_dir: '../training_checkpoints_ds2_wes_2'
   load_from_checkpoint: True
-  checkpoint_to_load: 'ckpt-8' #leave empty for latest
+  checkpoint_to_load: '' #leave empty for latest
 
 PostProcess:
 
