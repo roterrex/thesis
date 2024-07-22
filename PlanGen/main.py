@@ -25,13 +25,14 @@ dataloader = dataloader(conf, PATH)
 train_ds, test_ds, val_ds = dataloader.load_ds()
 
 p2p = pix2Pix(conf) 
+p2p.load_checkpoint(conf['Checkpoint']['load_from_checkpoint']) #only load if
 
 if conf['images']['Epochs'] > 0:
   tt = testTrain(p2p, None, conf)
   tt.fit(train_ds, test_ds, steps=conf['images']['Epochs'])
 
-ptpr = postProcessor(conf, p2p)
-ptpr.process(test_ds)
+pstpro = postProcessor(conf, p2p)
+pstpro.process(test_ds)
 
 while True:
   time.sleep(500000)

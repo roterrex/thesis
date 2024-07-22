@@ -13,6 +13,7 @@ class testTrain:
 
     def __init__(self, pix_model, dataloader, conf) -> None:
         self.conf = conf
+        self.save_interval = self.conf['Checkpoint']['save_every']
 
         self.pix_model = pix_model
         self.dataloader = dataloader
@@ -101,7 +102,7 @@ class testTrain:
 
 
             # Save (checkpoint) the model every 5k steps
-            
+            self.pix_model.save_checkpoint((step + 1) % self.save_interval == 0)
             
             if step == steps-1:
                 break

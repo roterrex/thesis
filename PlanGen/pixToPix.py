@@ -169,7 +169,7 @@ class pix2Pix:
 
         return result
     
-    def load_checkpoint(self, run_load): #self.conf['Checkpoint']['load_from_checkpoint']
+    def load_checkpoint(self, run_load):
         if run_load:
             if self.conf['Checkpoint']['checkpoint_to_load'] == '':
                 check_point_path = tf.train.latest_checkpoint(self.conf['Checkpoint']['load_dir'])
@@ -178,9 +178,10 @@ class pix2Pix:
             print("load from checkpoint : ", check_point_path)
             self.checkpoint.restore(check_point_path)
 
-    def save_checkpoint(self, run_save): #(step + 1) % 5000 == 0
-        self.checkpoint.save(file_prefix=self.checkpoint_prefix)
-        print("Checkpoint Saved")
+    def save_checkpoint(self, run_save):
+        if run_save:
+            self.checkpoint.save(file_prefix=self.checkpoint_prefix)
+            print("Checkpoint Saved")
 
 
 

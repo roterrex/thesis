@@ -19,6 +19,7 @@ Loss:
 
 Checkpoint:
   plot_checkpoints: True
+  save_every: 5000
   save_dir: './training_checkpoints_ds2_C'
   load_dir: './New folder'
   load_from_checkpoint: True

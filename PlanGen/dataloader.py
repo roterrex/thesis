@@ -33,10 +33,7 @@ class dataloader:
         val_ds = val_ds.map(self.load_image_test)
         val_ds = val_ds.batch(self.conf['LayoutGan']['BatchSize'])
 
-        return train_ds, test_ds, val_ds
-    
-    def load_checkpoint(self):
-        
+        return train_ds, test_ds, val_ds      
 
     def read_to_tensor(self, image_file):
         # Read and decode an image file to a uint8 tensor
@@ -71,7 +68,3 @@ class dataloader:
         input_image, real_image = util.normalize(input_image, real_image)
 
         return input_image, real_image
-
-        
-    
-#dataloader()
