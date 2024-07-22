@@ -10,7 +10,7 @@ class pix2Pix:
 
         self.shape = self.conf['LayoutGan']['ImgSize']
         self.output_channels = 3
-        self.LAMBDA = 1
+        self.LAMBDA = 10
 
         
         self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)
@@ -119,7 +119,7 @@ class pix2Pix:
         if self.loss_method_Cross:
             total_gen_loss = self.loss_object(tf.ones_like(disc_generated_output), disc_generated_output) + (self.LAMBDA * l1_loss)
         elif self.loss_method_Wesser:
-            total_gen_loss = -tf.reduce_mean(disc_generated_output)
+            total_gen_loss = -tf.reduce_mean(disc_generated_output) + (self.LAMBDA * l1_loss)
 
         return total_gen_loss#, gan_loss, l1_loss
 

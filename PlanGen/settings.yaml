@@ -2,9 +2,9 @@
 #Describes some characteristics and preferences
 ---
 images:
-  Dataset: 'D:\\uni\\Thesis\\New folder\\dataset2' #windows
-  #Dataset: '/home/roterex/thesis/dataset2' #wsl
-  Epochs: 0
+  #Dataset: 'D:\\uni\\Thesis\\New folder\\dataset2' #windows
+  Dataset: '/home/roterex/data/dataset2' #wsl
+  Epochs: 10000
   plotSample: False
 
 LayoutGan:
@@ -18,11 +18,11 @@ Loss:
   Loss_function: 'cross' #cross, wesser
 
 Checkpoint:
-  plot_checkpoints: True
+  plot_checkpoints: False
   save_every: 5000
   save_dir: './training_checkpoints_ds2_C'
   load_dir: '../training_checkpoints_ds2_wes_2'
-  load_from_checkpoint: True
+  load_from_checkpoint: False
   checkpoint_to_load: '' #leave empty for latest
 
 PostProcess:
