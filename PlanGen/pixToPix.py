@@ -10,7 +10,7 @@ class pix2Pix:
 
         self.shape = self.conf['LayoutGan']['ImgSize']
         self.output_channels = 3
-        self.LAMBDA = 10
+        self.LAMBDA = conf['Loss']['L1_lambda']
 
         
         self.generator_optimizer = tf.keras.optimizers.Adam(2e-4, beta_1=0.5)

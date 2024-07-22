@@ -4,7 +4,7 @@
 images:
   #Dataset: 'D:\\uni\\Thesis\\New folder\\dataset2' #windows
   Dataset: '/home/roterex/data/dataset2' #wsl
-  Epochs: 10000
+  Epochs: 30000
   plotSample: False
 
 LayoutGan:
@@ -15,6 +15,7 @@ LayoutGan:
   BufferSize: 400
 
 Loss:
+  L1_lambda: 1
   Loss_function: 'cross' #cross, wesser
 
 Checkpoint:
