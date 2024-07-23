@@ -34,5 +34,5 @@ if conf['images']['Epochs'] > 0:
 pstpro = postProcessor(conf, p2p)
 pstpro.process(val_ds)
 
-while True:
+while conf['Misc']['PauseOnFinish']:
   time.sleep(500000)

@@ -2,9 +2,9 @@
 #Describes some characteristics and preferences
 ---
 images:
-  #Dataset: 'D:\\uni\\Thesis\\New folder\\dataset2' #windows
-  Dataset: '/home/roterex/data/dataset2' #wsl
-  Epochs: 30000
+  Dataset: 'D:\\uni\\Thesis\\New folder\\dataset2' #windows
+  #Dataset: '/home/roterex/data/dataset2' #wsl
+  Epochs: 0
   plotSample: False
 
 LayoutGan:
@@ -15,21 +15,26 @@ LayoutGan:
   BufferSize: 400
 
 Loss:
-  L1_lambda: 1
+  L1_lambda: 1 # multiplier for L1 loss added to the other loss options
   Loss_function: 'cross' #cross, wesser
 
 Checkpoint:
-  plot_checkpoints: False
+  plot_checkpoints: True
   save_every: 5000
   save_dir: './training_checkpoints_ds2_C'
-  load_dir: '../training_checkpoints_ds2_wes_2'
-  load_from_checkpoint: False
-  checkpoint_to_load: '' #leave empty for latest
+  load_dir: './New folder'
+  load_from_checkpoint: True
+  checkpoint_to_load: 'ckpt-4' #leave empty for latest
 
 PostProcess:
-
+  OOI_save_path: './OOIs'
+  plot_images: True
+  close_thresh: 15
 
 Waz:
   a: 0.00005 #learning rate - not imp
   c: 0.01 #clipping param - not imp
   ncrit: 5 #critic updates per generator update - not imp
+
+Misc:
+  PauseOnFinish: False
